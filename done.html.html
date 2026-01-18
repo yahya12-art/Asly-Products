@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="mainHtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asly Products | الأصلي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { --green: #1a4a3a; --gold: #c5a04d; --white: #ffffff; --bg: #f4f7f6; }
+        * { box-sizing: border-box; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        body { font-family: 'Cairo', sans-serif; margin: 0; background: var(--bg); color: #333; overflow-x: hidden; }
+
+        /* Header & Logo */
+        header { background: var(--white); border-bottom: 2px solid var(--gold); position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .header-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 20px; max-width: 1200px; margin: auto; }
+        .logo-container { flex: 1; text-align: center; }
+        .logo-img { max-height: 100px; width: auto; cursor: pointer; transition: transform 0.3s; }
+        .logo-img:hover { transform: scale(1.05); }
+        .lang-btn { background: var(--green); color: white; border: none; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        nav { background: var(--white); display: flex; justify-content: center; gap: 8px; padding: 10px; border-top: 1px solid #eee; overflow-x: auto; }
+        nav button { background: #f0f0f0; border: none; padding: 10px 18px; border-radius: 25px; cursor: pointer; font-family: 'Cairo'; font-weight: 700; white-space: nowrap; font-size: 14px; }
+        nav button.active { background: var(--green); color: white; transform: translateY(-3px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+
+        /* Content Sections */
+        .container { max-width: 1100px; margin: 30px auto; padding: 0 20px; text-align: center; }
+        .section { display: none; }
+        .section.active { display: block; animation: slideUp 0.5s ease forwards; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Product Cards */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 20px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #eee; position: relative; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(26, 74, 58, 0.1); border-color: var(--gold); }
+        .card img { width: 100%; height: 300px; object-fit: cover; }
+        .card-body { padding: 20px; }
+        .card-price { color: var(--gold); font-weight: 900; font-size: 1.5rem; margin-top: 5px; }
+        .badge { position: absolute; top: 15px; right: 15px; background: #ff4d4d; color: white; padding: 5px 12px; border-radius: 15px; font-size: 12px; font-weight: bold; z-index: 10; }
+
+        /* Modal & Zoom Animation */
+        .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); }
+        .modal-content { background: white; margin: 2vh auto; padding: 25px; width: 95%; max-width: 550px; border-radius: 25px; position: relative; max-height: 95vh; overflow-y: auto; text-align: right; animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        @keyframes zoomIn { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        .modal-img { width: 100%; border-radius: 15px; margin-bottom: 15px; border: 1px solid #eee; }
+        .field { margin-bottom: 12px; }
+        label { display: block; margin-bottom: 5px; font-weight: 700; font-size: 13px; }
+        input, select, textarea { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-family: 'Cairo'; }
+
+        .buy-btn { background: #25d366; color: white; border: none; padding: 16px; width: 100%; border-radius: 15px; font-size: 1.1rem; font-weight: 900; cursor: pointer; margin-top: 10px; }
+        .buy-btn:hover { background: #1ebe57; transform: scale(1.02); }
+        .close-btn { position: absolute; left: 15px; top: 10px; font-size: 30px; cursor: pointer; color: #bbb; z-index: 100; }
+
+        /* Contact Section */
+        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .social-item { background: white; padding: 15px; border-radius: 12px; border: 1px solid #eee; text-decoration: none; color: #333; font-weight: bold; }
+        .social-item:hover { background: var(--green); color: white; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-top">
+            <button class="lang-btn" onclick="toggleLanguage()">English</button>
+            <div class="logo-container">
+                <img src="asly products logo.jpg" alt="Logo" class="logo-img" onclick="showSection('home', document.getElementById('nav-home'))">
+            </div>
+            <div style="width: 50px;"></div>
+        </div>
+        <nav>
+            <button onclick="showSection('home', this)" class="active" id="nav-home">الرئيسية</button>
+            <button onclick="showSection('acc', this)" id="nav-acc">الإكسسوارات</button>
+            <button onclick="showSection('other', this)" id="nav-other">أقسام أخرى</button>
+            <button onclick="showSection('contact', this)" id="nav-contact">تواصل معنا</button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div id="home" class="section active">
+            <h1 id="t-welcome">متجر الأصلي - الجودة المضمونة</h1>
+            <p id="t-sub">منتجات مختارة بعناية للسوق السعودي</p>
+            <div class="grid">
+                <div class="card" onclick="openProduct(1)">
+                    <div class="badge">الأكثر طلباً</div>
+                    <img src="C:\Users\Public\Programs\mblock\resources\ml\v2\exec\python-env\win\Lib\site-packages\jedi\third_party\typeshed\third_party\2and3\cryptography\asly done\stand.jpg.jpg" alt="P1">
+                    <div class="card-body"><h3>مقبض تصوير مغناطيسي + باور بنك</h3><div class="card-price">250 SAR</div></div>
+                </div>
+                <div class="card" onclick="openProduct(2)">
+                    <div class="badge">وصل حديثاً</div>
+                    <img src="C:\Users\Public\Programs\mblock\resources\ml\v2\exec\python-env\win\Lib\site-packages\jedi\third_party\typeshed\third_party\2and3\cryptography\asly done\e-com image.jpg.jpg" alt="P2">
+                    <div class="card-body"><h3>شاشة أضافية للجوال</h3><div class="card-price">350 SAR</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="acc" class="section">
+            <div class="grid">
+                <div class="card" onclick="openProduct(1)">
+                    <img src="C:\Users\Public\Programs\mblock\resources\ml\v2\exec\python-env\win\Lib\site-packages\jedi\third_party\typeshed\third_party\2and3\cryptography\asly done\stand.jpg.jpg" alt="P1">
+                    <div class="card-body"><h3>مقبض تصوير مغناطيسي</h3><div class="card-price">250 SAR</div></div>
+                </div>
+                <div class="card" onclick="openProduct(2)">
+                    <img src="C:\Users\Public\Programs\mblock\resources\ml\v2\exec\python-env\win\Lib\site-packages\jedi\third_party\typeshed\third_party\2and3\cryptography\asly done\e-com image.jpg.jpg" alt="P2">
+                    <div class="card-body"><h3>شاشة أضافية للجوال</h3><div class="card-price">350 SAR</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="other" class="section">
+            <div style="padding: 60px; border: 2px dashed #ccc; border-radius: 20px; background: #fff;">
+                <h2 id="t-coming">قريباً جداً</h2>
+                <p id="t-coming-sub">أقسام الديكور والملابس تحت التجهيز</p>
+            </div>
+        </div>
+
+        <div id="contact" class="section">
+            <h2 id="t-contact-h">تواصل معنا</h2>
+            <div class="social-grid">
+                <a href="https://wa.me/212620387293" class="social-item">WhatsApp 🟢</a>
+                <a href="https://instagram.com/asly" class="social-item">Instagram 📸</a>
+                <a href="mailto:asly@gmail.com" class="social-item" style="grid-column: span 2;">Email: asly@gmail.com 📧</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="m-img" src="" class="modal-img">
+            <h2 id="m-title" style="color: var(--green); margin: 0;"></h2>
+            <p id="m-price" style="color: var(--gold); font-size: 1.6rem; font-weight: 900; margin: 10px 0;"></p>
+            
+            <div class="field">
+                <label id="l-qty">الكمية*</label>
+                <select id="f-qty" onchange="updatePrice()">
+                    <option value="1">1 قطعة (السعر الأصلي)</option>
+                    <option value="2">2 قطعة (عرض التوفير)</option>
+                </select>
+            </div>
+            <div class="field"><label id="l-ph">رقم الجوال*</label><input type="text" id="f-phone" placeholder="+966"></div>
+            <div class="field"><label id="l-pr">المنطقة*</label>
+                <select id="f-prov">
+                    <option>الرياض</option><option>مكة المكرمة</option><option>الشرقية</option>
+                    <option>المدينة المنورة</option><option>القصيم</option><option>تبوك</option>
+                </select>
+            </div>
+            <div class="field"><label id="l-ad">العنوان*</label><textarea id="f-addr" placeholder="الحي - الشارع"></textarea></div>
+            <button class="buy-btn" onclick="sendOrder()" id="btn-sub">تأكيد الطلب</button>
+        </div>
+    </div>
+
+    <script>
+        const products = {
+            1: { ar: "مقبض تصوير مغناطيسي + باور بنك لاسلكي", en: "Magnetic Grip + Powerbank", p1: 250, p2: 450, img: "p1.jpg" },
+            2: { ar: "شاشة أضافية للجوال", en: "Extra Mobile Screen", p1: 350, p2: 650, img: "p2.jpg" }
+        };
+
+        let lang = 'ar';
+        let currentProdId = 1;
+
+        function toggleLanguage() {
+            lang = lang === 'ar' ? 'en' : 'ar';
+            document.getElementById('mainHtml').dir = lang === 'ar' ? 'rtl' : 'ltr';
+            document.querySelector('.lang-btn').innerText = lang === 'ar' ? 'English' : 'عربي';
+            
+            const t = {
+                ar: { h:'الرئيسية', a:'الإكسسوارات', o:'أخرى', c:'تواصل معنا', w:'متجر الأصلي - الجودة المضمونة', s:'منتجات مختارة بعناية للسوق السعودي', cm:'قريباً', cms:'أقسام الديكور تحت التجهيز', ch:'تواصل معنا', q:'الكمية', p:'رقم الجوال', r:'المنطقة', d:'العنوان', sub:'تأكيد الطلب' },
+                en: { h:'Home', a:'Accessories', o:'Other', c:'Contact', w:'Asly Store - Quality Guaranteed', s:'Carefully selected for KSA market', cm:'Coming Soon', cms:'Decor and Clothing sections in progress', ch:'Contact Us', q:'Quantity', p:'Mobile Number', r:'Region', d:'Address', sub:'Confirm Order' }
+            };
+
+            document.getElementById('nav-home').innerText = t[lang].h;
+            document.getElementById('nav-acc').innerText = t[lang].a;
+            document.getElementById('nav-other').innerText = t[lang].o;
+            document.getElementById('nav-contact').innerText = t[lang].c;
+            document.getElementById('t-welcome').innerText = t[lang].w;
+            document.getElementById('t-sub').innerText = t[lang].s;
+            document.getElementById('t-coming').innerText = t[lang].cm;
+            document.getElementById('t-coming-sub').innerText = t[lang].cms;
+            document.getElementById('t-contact-h').innerText = t[lang].ch;
+            document.getElementById('l-qty').innerText = t[lang].q;
+            document.getElementById('l-ph').innerText = t[lang].p;
+            document.getElementById('l-pr').innerText = t[lang].r;
+            document.getElementById('l-ad').innerText = t[lang].d;
+            document.getElementById('btn-sub').innerText = t[lang].sub;
+        }
+
+        function showSection(id, btn) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        function openProduct(id) {
+            currentProdId = id;
+            document.getElementById('m-img').src = products[id].img;
+            document.getElementById('m-title').innerText = lang === 'ar' ? products[id].ar : products[id].en;
+            updatePrice();
+            document.getElementById('orderModal').style.display = 'block';
+        }
+
+        function updatePrice() {
+            const q = document.getElementById('f-qty').value;
+            const price = q == 1 ? products[currentProdId].p1 : products[currentProdId].p2;
+            document.getElementById('m-price').innerText = price + " SAR";
+        }
+
+        function closeModal() { document.getElementById('orderModal').style.display = 'none'; }
+
+        function sendOrder() {
+            const qty = document.getElementById('f-qty').value;
+            const phone = document.getElementById('f-phone').value;
+            const prov = document.getElementById('f-prov').value;
+            const addr = document.getElementById('f-addr').value;
+            const pName = lang === 'ar' ? products[currentProdId].ar : products[currentProdId].en;
+            const text = `طلب جديد:%0Aالمنتج: ${pName}%0Aالكمية: ${qty}%0Aرقم العميل: ${phone}%0Aالمنطقة: ${prov}%0Aالعنوان: ${addr}`;
+            window.open(`https://wa.me/966YOURNUMBER?text=${text}`);
+        }
+    </script>
+</body>
+</html>
